@@ -221,10 +221,12 @@ def get_weekly_best_product(limit = 8, cateId = 0):
         JOIN receipt rc ON rc.id = dr.receiptId
             AND rc.timeOrder >= DATE_SUB(NOW(), INTERVAL 7 DAY)
         GROUP BY productId
-        ORDER BY - qty
+        ORDER BY - SUM(quantity)
         LIMIT {}) h ON h.productId = p.id
     GROUP BY p.id , name , price , discount , salePrice
     ORDER BY - h.qty""".format(cateId, cateId, limit)
+
+    # return query
     return get_data(query)
 
 @app.get("/api/products/search")
